@@ -44,7 +44,7 @@ class SMPLModel():
     self.J = None
     self.R = None
 
-    self.update()
+#    self.update()
 
   def set_params(self, pose=None, beta=None, trans=None):
     """
@@ -110,7 +110,7 @@ class SMPLModel():
     G = G - self.pack(
       np.matmul(
         G,
-        np.hstack([self.J, np.zeros([24, 1])]).reshape([24, 4, 1])
+        np.hstack([self.J, np.zeros([self.J.shape[0], 1])]).reshape([-1, 4, 1])
         )
       )
     # transformation of each vertex
@@ -119,7 +119,7 @@ class SMPLModel():
     v = np.matmul(T, rest_shape_h.reshape([-1, 4, 1])).reshape([-1, 4])[:, :3]
     self.verts = v + self.trans.reshape([1, 3])
 
-  def rodrigues(self, r):
+  def  rodrigues(self, r):
     """
     Rodrigues' rotation formula that turns axis-angle vector into rotation
     matrix in a batch-ed manner.
@@ -204,8 +204,8 @@ class SMPLModel():
 
 if __name__ == '__main__':
   smpl = SMPLModel('./model.pkl')
-  np.random.seed(9608)
-  pose = (np.random.rand(*smpl.pose_shape) - 0.5) * 0.4
+  np.random.seed(12)
+  pose = (np.random.rand(*smpl.pose_shape) - 0.5) * 2
   beta = (np.random.rand(*smpl.beta_shape) - 0.5) * 0.06
   trans = np.zeros(smpl.trans_shape)
   smpl.set_params(beta=beta, pose=pose, trans=trans)

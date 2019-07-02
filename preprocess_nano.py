@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import sys
 
-output_path = './model.pkl'
+output_path = './nano_hand_model.pkl'
 
 if __name__ == '__main__':
   if len(sys.argv) < 2:
@@ -12,6 +12,11 @@ if __name__ == '__main__':
   with open(src_path, 'rb') as f:
     src_data = pickle.load(f, encoding="latin1")
   model = {
+    'hands_components' : np.array(src_data['hands_components']),
+    'hands_mean' : src_data['hands_mean'],
+
+
+
     'J_regressor': src_data['J_regressor'],
     'weights': np.array(src_data['weights']),
     'posedirs': np.array(src_data['posedirs']),
